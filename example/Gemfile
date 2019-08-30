@@ -2,4 +2,3 @@ source 'https://rubygems.org'
 
 gem 'jekyll'
 gem 'jekyll-typescript-converter', git: 'git@github.com:shwaka/jekyll-typescript-converter.git'
-gem 'rake'
