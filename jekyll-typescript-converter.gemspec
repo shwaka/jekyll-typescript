@@ -8,4 +8,5 @@ Gem::Specification.new do |s|
   s.files = ["lib/jekyll-typescript-converter.rb"]
   s.homepage = 'https://github.com/shwaka/jekyll-typescript-converter'
   s.license = 'MIT'
+  s.add_dependency "rake"
 end

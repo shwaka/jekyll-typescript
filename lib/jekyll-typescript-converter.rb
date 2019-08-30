@@ -1,5 +1,7 @@
+# coding: utf-8
 require "pathname"
 require "json"
+require "rake"
 
 Jekyll::Hooks.register :site, :after_init do |site|
   build_dir = site.config["typescript"]["build_dir"]
@@ -31,7 +33,12 @@ module Jekyll
         # rake
         Dir.chdir(ts_dir)
         puts "Running tsc (rake)..."
-        system("bundle exec rake")
+        # system("bundle exec rake")
+        Rake.with_application do |rake|
+          # Rake.with_application の定義 (in rake/rake_module.rb) のコメント参照
+          rake.load_rakefile
+          rake[:default].invoke
+        end
         if browserify(data)
           return `browserify #{target.to_s}`
         else
