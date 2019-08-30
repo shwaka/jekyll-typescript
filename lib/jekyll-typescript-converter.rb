@@ -28,10 +28,10 @@ module Jekyll
         build_dir = site_source_path / config["build_dir"]
         ENV["TSBUILD"] = build_dir.to_s
         target = build_dir / get_target_filename(data)
-        # make
+        # rake
         Dir.chdir(ts_dir)
-        puts "Running tsc (make)..."
-        system("make")
+        puts "Running tsc (rake)..."
+        system("bundle exec rake")
         if browserify(data)
           return `browserify #{target.to_s}`
         else
