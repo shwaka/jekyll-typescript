@@ -9,9 +9,6 @@ jsfile_list = tsfile_list.map do |tsfile|
   "#{build_dir}/#{basename}"
 end
 
-p tsfile_list
-p jsfile_list
-
 jsfile_list.each{|jsfile|
   file jsfile => tsfile_list do |t|
     puts "Creating #{jsfile} from #{tsfile_list}..."
