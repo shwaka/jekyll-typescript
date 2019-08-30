@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = 'jekyll-typescript-converter'
-  s.version = '0.0.1'
+  s.version = '0.0.2'
   s.summary = "TypeScript converter for Jekyll"
   s.description = "This gem converts TypeScript sources to JavaScript by using tsc (and browserify)."
   s.authors = ["Shun Wakatsuki"]

@@ -18,6 +18,8 @@ module Jekyll
       end
 
       def convert(content)
+        data = JSON.parse(content)
+        validate_data(data)
         config = @config["typescript"]
         site_source_path = Pathname.new(site_source)
         # ts source directory
@@ -25,12 +27,12 @@ module Jekyll
         # build target
         build_dir = site_source_path / config["build_dir"]
         ENV["TSBUILD"] = build_dir.to_s
-        target = build_dir / get_target_filename(content)
+        target = build_dir / get_target_filename(data)
         # make
         Dir.chdir(ts_dir)
         puts "Running tsc (make)..."
         system("make")
-        if browserify(content)
+        if browserify(data)
           return `browserify #{target.to_s}`
         else
           return target.read
@@ -42,14 +44,18 @@ module Jekyll
         @site_source ||= File.expand_path(@config["source"]).freeze
       end
 
-      def get_target_filename(content)
-        # return content.strip.sub(/\.ts$/, ".js")
-        data = JSON.parse(content)
-        return data["target"].strip.sub(/\.ts$/, ".js")
+      def validate_data(data)
+        if !data.has_key?("source")
+          throw '"source" not found'
+        end
       end
 
-      def browserify(content)
-        data = JSON.parse(content)
+      def get_target_filename(data)
+        # return content.strip.sub(/\.ts$/, ".js")
+        return data["source"].strip.sub(/\.ts$/, ".js")
+      end
+
+      def browserify(data)
         return data["browserify"]
       end
     end

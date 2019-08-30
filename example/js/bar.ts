@@ -1,6 +1,6 @@
 ---
 ---
 {
-  "target": "foo.ts",
+  "source": "foo.ts",
   "browserify": true
 }
