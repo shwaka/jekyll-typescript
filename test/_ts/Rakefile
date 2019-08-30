@@ -1,0 +1,21 @@
+require 'fileutils'
+
+task default: :all
+
+tsfile_list = Dir["./**/*.ts"]
+build_dir = ENV["TSBUILD"]
+jsfile_list = tsfile_list.map do |tsfile|
+  basename = tsfile.sub(/\.ts$/, ".js")
+  "#{build_dir}/#{basename}"
+end
+
+jsfile_list.each{|jsfile|
+  file jsfile => tsfile_list do |t|
+    puts "Creating #{jsfile} from #{tsfile_list}..."
+    `tsc --outDir #{build_dir}`
+  end
+}
+
+task :all => jsfile_list do
+  puts "All tasks are run"
+end
