@@ -16,6 +16,12 @@ module JekyllTypescript
       return target.read
     end
 
+    def run(ts_rel_path)
+      target = get_target_path(ts_rel_path, false)
+      rake(target.to_s)
+      system("node #{target.to_s}")
+    end
+
     private
     # returns the path to the target file as an object of Pathname
     def get_target_path(ts_rel_path, browserify)

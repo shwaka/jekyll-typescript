@@ -3,4 +3,9 @@ plugins:
 typescript:
   build_dir: .tsbuild
   default_source_dir: _ts
+  hooks:
+    - container: site
+      event: post_read
+      source_dir: _ts2
+      source_file: test.ts
 livereload: true

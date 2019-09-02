@@ -1,3 +1,4 @@
+# coding: utf-8
 require "pathname"
 
 module JekyllTypescript
@@ -23,6 +24,10 @@ module JekyllTypescript
 
     def default_source_dir
       @ts_config["default_source_dir"]
+    end
+
+    def hooks
+      return @ts_config["hooks"]
     end
   end
 end
