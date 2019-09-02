@@ -1,7 +1,5 @@
 require 'fileutils'
 
-task default: :all
-
 tsfile_list = Dir["./**/*.ts"]
 build_dir = ENV["TSBUILD"]
 
@@ -25,6 +23,4 @@ jsfile_list.each{|jsfile|
 
 
 # default action
-task :all => jsfile_list do
-  puts "All tasks are run"
-end
+task default: jsfile_list
