@@ -26,7 +26,7 @@ module Jekyll
         else
           ext = ".js"
         end
-        relative_path = data["source"].strip.sub(/\.ts$/, ext)
+        relative_path = data["source"].sub(/\.ts$/, ext)
         return @build_dir / relative_path
       end
 
