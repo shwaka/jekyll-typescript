@@ -27,7 +27,7 @@ module JekyllTypescript
     end
 
     def hooks
-      return @ts_config["hooks"]
+      return @ts_config["hooks"] || []
     end
   end
 end
