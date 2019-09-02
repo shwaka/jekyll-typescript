@@ -13,20 +13,21 @@ module Jekyll
   module Converters
     class TypeScriptHandler
       def initialize(ts_dir, build_dir)
-        # ts_dir, build_dir: Pathname
-        @ts_dir = ts_dir
-        @build_dir = build_dir
+        # ts_dir, build_dir: Pathname or string
+        @ts_dir = Pathname.new(ts_dir)
+        @build_dir = Pathname.new(build_dir)
       end
 
       # returns the path to the target file as an object of Pathname
-      def get_target_path(data)
-        browserify = data["browserify"]
+      def get_target_path(ts_rel_path, browserify)
+        # ts_rel_path: string or Pathname
+        # browserify: boolean
         if browserify
           ext = ".browserified.js"
         else
           ext = ".js"
         end
-        relative_path = data["source"].sub(/\.ts$/, ext)
+        relative_path = ts_rel_path.to_s.sub(/\.ts$/, ext)
         return @build_dir / relative_path
       end
 
@@ -88,7 +89,7 @@ module Jekyll
         # build target
         build_dir = site_source_path / config["build_dir"]
         handler = TypeScriptHandler.new(ts_dir, build_dir)
-        target = handler.get_target_path(data)
+        target = handler.get_target_path(data["source"], data["browserify"])
         handler.rake(target.to_s)
         return target.read
       end
