@@ -16,8 +16,9 @@ module Jekyll
         data = JSON.parse(content)
         validate_data(data)
         config = JekyllTypescript::Config.new(@config)
-        ts_dir = config.get_ts_dir(config.source_dir)
-        build_dir = config.get_build_dir(config.source_dir)
+        source_dir = data["source_dir"] || config.default_source_dir
+        ts_dir = config.get_ts_dir(source_dir)
+        build_dir = config.get_build_dir(source_dir)
         handler = JekyllTypescript::Handler.new(ts_dir, build_dir)
         return handler.get_target_code(data["source"], data["browserify"])
       end

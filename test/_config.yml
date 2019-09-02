@@ -2,5 +2,5 @@ plugins:
   - jekyll-typescript-converter
 typescript:
   build_dir: .tsbuild
-  source_dir: _ts
+  default_source_dir: _ts
 livereload: true

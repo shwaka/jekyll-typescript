@@ -6,7 +6,7 @@ module JekyllTypescript
       @site_config = site_config
       @site_source = Pathname(site_config["source"])
       @ts_config = site_config["typescript"]
-      @build_dir_base = @site_source / @ts_config["build_dir"]
+      @build_dir_base = @site_source / (@ts_config["build_dir"] || ".tsbuild")
     end
 
     def add_exclude
@@ -21,9 +21,8 @@ module JekyllTypescript
       return @site_source / ts_dir_relative
     end
 
-    def source_dir
-      # temporary
-      @ts_config["source_dir"]
+    def default_source_dir
+      @ts_config["default_source_dir"]
     end
   end
 end
