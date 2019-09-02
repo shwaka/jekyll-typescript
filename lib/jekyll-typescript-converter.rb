@@ -18,6 +18,13 @@ module Jekyll
         @build_dir = Pathname.new(build_dir)
       end
 
+      def get_target_code(ts_rel_path, browserify)
+        target = get_target_path(ts_rel_path, browserify)
+        rake(target.to_s)
+        return target.read
+      end
+
+      private
       # returns the path to the target file as an object of Pathname
       def get_target_path(ts_rel_path, browserify)
         # ts_rel_path: string or Pathname
@@ -41,7 +48,6 @@ module Jekyll
         end
       end
 
-      private
       def setup(rake_app)
         if File.exist?("Rakefile")
           ENV["TSBUILD"] = @build_dir.to_s
@@ -89,9 +95,7 @@ module Jekyll
         # build target
         build_dir = site_source_path / config["build_dir"]
         handler = TypeScriptHandler.new(ts_dir, build_dir)
-        target = handler.get_target_path(data["source"], data["browserify"])
-        handler.rake(target.to_s)
-        return target.read
+        return handler.get_target_code(data["source"], data["browserify"])
       end
 
       private
