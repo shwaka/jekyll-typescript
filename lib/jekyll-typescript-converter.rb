@@ -37,13 +37,9 @@ module Jekyll
         Rake.with_application do |rake|
           # Rake.with_application の定義 (in rake/rake_module.rb) のコメント参照
           rake.load_rakefile
-          rake[:default].invoke
+          rake[target.to_s].invoke
         end
-        if browserify(data)
-          return `browserify #{target.to_s}`
-        else
-          return target.read
-        end
+        return target.read
       end
 
       private
@@ -59,11 +55,13 @@ module Jekyll
 
       def get_target_filename(data)
         # return content.strip.sub(/\.ts$/, ".js")
-        return data["source"].strip.sub(/\.ts$/, ".js")
-      end
-
-      def browserify(data)
-        return data["browserify"]
+        browserify = data["browserify"]
+        if browserify
+          ext = ".browserified.js"
+        else
+          ext = ".js"
+        end
+        return data["source"].strip.sub(/\.ts$/, ext)
       end
     end
   end

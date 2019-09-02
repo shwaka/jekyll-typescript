@@ -4,8 +4,10 @@ task default: :all
 
 tsfile_list = Dir["./**/*.ts"]
 build_dir = ENV["TSBUILD"]
+
+# generate .js file by tsc
 jsfile_list = tsfile_list.map do |tsfile|
-  basename = tsfile.sub(/\.ts$/, ".js")
+  basename = tsfile.sub(/\.ts$/, ".js").sub(%r(^\./), "")
   "#{build_dir}/#{basename}"
 end
 
@@ -14,8 +16,15 @@ jsfile_list.each{|jsfile|
     puts "Creating #{jsfile} from #{tsfile_list}..."
     `tsc --outDir #{build_dir}`
   end
+  browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")
+  file browserified_jsfile => jsfile do |t|
+    puts "Browserifying #{jsfile}..."
+    `browserify #{jsfile} -o #{browserified_jsfile}`
+  end
 }
 
+
+# default action
 task :all => jsfile_list do
   puts "All tasks are run"
 end
