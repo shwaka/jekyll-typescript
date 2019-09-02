@@ -65,11 +65,9 @@ module Jekyll
 
       def setup(rake_app, build_dir)
         if File.exist?("Rakefile")
-          puts "Setup rake from Rakefile"
           ENV["TSBUILD"] = build_dir.to_s
           rake_app.load_rakefile
         else
-          puts "Setup rake within jekyll-typescript-converter"
           tsfile_list = Dir["./**/*.ts"]
 
           # generate .js file by tsc
