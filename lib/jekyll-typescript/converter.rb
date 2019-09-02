@@ -1,4 +1,5 @@
 require "json"
+require "jekyll-typescript/config"
 
 module Jekyll
   module Converters
@@ -14,12 +15,9 @@ module Jekyll
       def convert(content)
         data = JSON.parse(content)
         validate_data(data)
-        config = @config["typescript"]
-        site_source_path = Pathname.new(site_source)
-        # ts source directory
-        ts_dir = site_source_path / config["source_dir"]
-        # build target
-        build_dir = site_source_path / config["build_dir"]
+        config = JekyllTypescript::Config.new(@config)
+        ts_dir = config.get_ts_dir(config.source_dir)
+        build_dir = config.get_build_dir(config.source_dir)
         handler = JekyllTypescript::Handler.new(ts_dir, build_dir)
         return handler.get_target_code(data["source"], data["browserify"])
       end
