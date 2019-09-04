@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
 gem 'jekyll'
-gem 'jekyll-typescript-converter', :path => '..'
+gem 'jekyll-typescript', :path => '..'
