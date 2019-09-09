@@ -3,6 +3,10 @@ require "pathname"
 require "rake"
 
 module JekyllTypescript
+  class FiltersClass
+    extend Jekyll::Filters
+  end
+
   class Handler
     def initialize(ts_dir, build_dir)
       # ts_dir, build_dir: Pathname or string
@@ -16,15 +20,18 @@ module JekyllTypescript
       return target.read
     end
 
-    def run(ts_rel_path)
+    def run(ts_rel_path, site_json_file = nil, site = nil)
       target = get_target_path(ts_rel_path, false)
       rake(target.to_s)
+      if site_json_file
+        if site.nil?
+          raise "site not specified"
+        end
+        json_path = @build_dir / site_json_file
+        json_content = JekyllTypescript::FiltersClass.jsonify(site)
+        json_path.write(json_content)
+      end
       system("node #{target.to_s}")
-    end
-
-    def write_to_build_dir(rel_path, content)
-      destination = @build_dir / rel_path
-      destination.write(content)
     end
 
     private

@@ -3,10 +3,6 @@ require "jekyll-typescript/config"
 require "jekyll-typescript/handler"
 
 module JekyllTypescript
-  class FiltersClass
-    extend Jekyll::Filters
-  end
-
   Jekyll::Hooks.register :site, :after_init do |site|
     config = JekyllTypescript::Config.new(site.config)
     config.hooks.each do |hook|
@@ -19,18 +15,10 @@ module JekyllTypescript
                                               config.get_build_dir(ts_dir_rel))
       if container_name == :site
         if event_name == :after_init
-          if site_json_file
-            site_json = FiltersClass.jsonify(site)
-            handler.write_to_build_dir(site_json_file, site_json)
-          end
-          handler.run(ts_rel_path)
+          handler.run(ts_rel_path, site_json_file, site)
         else
           Jekyll::Hooks.register container_name, event_name do |_site|
-            if site_json_file
-              site_json = FiltersClass.jsonify(_site)
-              handler.write_to_build_dir(site_json_file, site_json)
-            end
-            handler.run(ts_rel_path)
+            handler.run(ts_rel_path, site_json_file, _site)
           end
         end
       else
