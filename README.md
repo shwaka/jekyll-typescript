@@ -10,9 +10,28 @@ you have to be very careful and patient with incompatible updates.
 - `example/` directory is outdated.
 
 
+# Aim
+This gem aims to provide a tool to use `typescript` in `jekyll` as simple as possible.
+The word "simple" means that
+no complex frameworks (such as `webpack`) are needed.
+This should be useful for small projects.
+
 # Usage
 See the `test/` directory.
 Run `bundle update` and `jekyll build` (or `jekyll serve`) in that directory.
+
+# Requirements
+- jekyll
+- rake
+- tsc
+- browserify (optional)
+
+Tested on
+
+- Ubuntu 16.04
+- ruby 2.6.3
+- jekyll 4.0.0
+- tsc 3.5.3
 
 # TODO
 - `_config.yml` や `*.ts` 内の設定に漏れがあった場合のエラーメッセージ
