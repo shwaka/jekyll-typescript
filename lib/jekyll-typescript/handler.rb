@@ -31,6 +31,7 @@ module JekyllTypescript
         json_content = JekyllTypescript::FiltersClass.jsonify(site)
         json_path.write(json_content)
       end
+      Dir.chdir(@build_dir)
       system("node #{target.to_s}")
     end
 

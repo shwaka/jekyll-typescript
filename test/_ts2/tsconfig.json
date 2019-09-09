@@ -3,6 +3,8 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
-    "alwaysStrict": true
+    "alwaysStrict": true,
+    "types": ["node"],
+    "typeRoots": ["/usr/local/lib/node_modules/@types"]
   }
 }
