@@ -8,4 +8,5 @@ typescript:
       event: post_read
       source_dir: _ts2
       source_file: test.ts
+      site_json_file: site.json
 livereload: true

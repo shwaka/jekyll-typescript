@@ -22,6 +22,11 @@ module JekyllTypescript
       system("node #{target.to_s}")
     end
 
+    def write_to_build_dir(rel_path, content)
+      destination = @build_dir / rel_path
+      destination.write(content)
+    end
+
     private
     # returns the path to the target file as an object of Pathname
     def get_target_path(ts_rel_path, browserify)
