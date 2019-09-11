@@ -7,7 +7,7 @@ you have to be very careful and patient with incompatible updates.
   Even the names of the repository and gem may be also changed.
 - Not published to Rubygems.org.
 - No documentation is provided.
-- `example/` directory is outdated.
+- `example/` directory may be outdated.
 
 
 # Aim
@@ -17,7 +17,19 @@ no complex frameworks (such as `webpack`) are needed.
 This should be useful for small projects.
 
 # Usage
-See the `test/` directory.
+I'm not sure, but you may need to add `bundle exec` before `jekyll` commands.
+(i.e. `bundle exec jekyll build`)
+
+## `example/`
+In the `example/` directory, you can find the simplest example.
+In order to be not affected by updates, a commit hash is specified in the `Gemfile`.
+
+1. `bundle update`
+2. `jekyll build` (or `jekyll serve`)
+
+## `test/`
+This directory is used for a test during development.
+Hence this should be kept to be up-to-date.
 Run `bundle update` and `jekyll build` (or `jekyll serve`) in that directory.
 
 # Requirements

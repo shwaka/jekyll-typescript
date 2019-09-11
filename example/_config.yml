@@ -1,5 +1,5 @@
 plugins:
-  - jekyll-typescript-converter
+  - jekyll-typescript
 typescript:
   build_dir: .tsbuild
-  source_dir: _ts
+  default_source_dir: _ts
