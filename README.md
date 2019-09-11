@@ -49,3 +49,13 @@ Tested on
 - `_config.yml` や `*.ts` 内の設定に漏れがあった場合のエラーメッセージ
 - gemspec 内の `files` が足りてないけど大丈夫？
   GitHub からインストールしている場合は平気？
+- GitHub Pages に対応する
+    - 当然 GitHub Pages では(一部の例外を除いて) plugin を実行できないので，
+      `.js` ファイルを local で生成して，ソースコードとして(`_site` 外に)出力する．
+    - 設定は `hooks` みたいに `_config.yml` で行うと良さそう．
+      名前は何が良いんだろう？ `in_source_build` みたいな感じ？
+    - そもそも， `_config.yml` の `plugins` に無効なプラグインが書かれていた場合の挙動ってどうなる？
+        - 単にそれを無視する？
+        - エラーを吐いて build 自体止まってしまう？
+    - 参考: [Dependency versions | GitHub Pages](https://pages.github.com/versions/)
+      ここに載っている plugins だけが使える？
