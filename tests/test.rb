@@ -83,10 +83,17 @@ EOS
                  .select{|f| File.directory? f }
                  .map{|f| Pathname.new(f) }
 
+    len = dir_list.length
+    count = 0
+    print "#{count}/#{len}"
     dir_list.each do |dir|
+      count += 1
+      print "\r#{count}/#{len}"
+      $stdout.flush
       test_dir = TestDir.new(dir)
       test_dir.test
     end
+    print "\n"
   end
 
   def self.show
