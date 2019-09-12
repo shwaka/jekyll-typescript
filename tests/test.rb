@@ -19,11 +19,55 @@ class TestDir
     @dir = dir
   end
 
-  def assert_success
+  def test
+    if expected == :noerror
+      assert_noerror
+    elsif expected == :error
+      assert_error
+    else
+      msg = "Expected result is not set"
+      @@error_list << [@dir, msg]
+    end
+  end
+
+  def assert_noerror
     Dir.chdir(@@root_dir / @dir)
     `jekyll build 2>&1`
     if $?.exitstatus != 0
-      @@error_list << @dir
+      msg = "Expected: noerror, Actual: error"
+      @@error_list << [@dir, msg]
+    end
+  end
+
+  def assert_error
+    Dir.chdir(@@root_dir / @dir)
+    output = `jekyll build --trace 2>&1`
+    if $?.exitstatus == 0
+      msg = "Expected: error, Actual: noerror"
+      @@error_list << [@dir, msg]
+    else
+      regexp = Regexp.new(@@data["error"][@dir.to_s]["error_msg_regexp"])
+      if !(regexp =~ output)
+        msg = <<EOS
+Error occurred as expected, but wrong error message
+Expected regexp: #{regexp}
+EOS
+        @@error_list << [@dir, msg]
+      end
+    end
+  end
+
+  def expected
+    noerror = (@@data["noerror"] || {}).key?(@dir.to_s)
+    error = (@@data["error"] || {}).key?(@dir.to_s)
+    if noerror && error
+      raise "duplicate"
+    elsif noerror
+      return :noerror
+    elsif error
+      return :error
+    else
+      return nil
     end
   end
 
@@ -41,7 +85,7 @@ class TestDir
 
     dir_list.each do |dir|
       test_dir = TestDir.new(dir)
-      test_dir.assert_success
+      test_dir.test
     end
   end
 
@@ -49,7 +93,13 @@ class TestDir
     if @@error_list.length == 0
       puts "Success!"
     else
-      puts "Error in #{@@error_list.map{|d| d.basename.to_s}}"
+      puts "Failed in the following directories:"
+      puts @@error_list.map{|e| e[0].to_s}.join(" ")
+      @@error_list.each{|e|
+        puts ""
+        puts "[#{e[0]}]"
+        puts e[1]
+      }
     end
   end
 end

@@ -1,5 +1,5 @@
-success:
+noerror:
   test:
-failure:
+error:
   test_fail:
-    msg: hoge
+    error_msg_regexp: "jekyll"
