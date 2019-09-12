@@ -9,4 +9,9 @@ typescript:
       source_dir: _ts2
       source_file: test.ts
       site_json_file: site.json
+  in_source_build:
+    - source_dir: _ts2
+      source_file: test.ts
+      destination: js/generated/test.js
+      browserify: true
 livereload: true

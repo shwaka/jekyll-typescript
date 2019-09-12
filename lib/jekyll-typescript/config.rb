@@ -3,6 +3,8 @@ require "pathname"
 
 module JekyllTypescript
   class Config
+    attr_reader :site_source
+
     def initialize(site_config)
       @site_config = site_config
       @site_source = Pathname(site_config["source"])
@@ -28,6 +30,10 @@ module JekyllTypescript
 
     def hooks
       return @ts_config["hooks"] || []
+    end
+
+    def in_source_build
+      return @ts_config["in_source_build"] || []
     end
   end
 end

@@ -1,6 +1,7 @@
 # coding: utf-8
 require "pathname"
 require "rake"
+require "fileutils"
 
 module JekyllTypescript
   class FiltersClass
@@ -15,12 +16,14 @@ module JekyllTypescript
     end
 
     def get_target_code(ts_rel_path, browserify)
+      # for converter
       target = get_target_path(ts_rel_path, browserify)
       rake(target.to_s)
       return target.read
     end
 
     def run(ts_rel_path, site_json_file = nil, site = nil)
+      # for hooks
       target = get_target_path(ts_rel_path, false)
       rake(target.to_s)
       if site_json_file
@@ -33,6 +36,16 @@ module JekyllTypescript
       end
       Dir.chdir(@build_dir)
       system("node #{target.to_s}")
+    end
+
+    def create_in_source(ts_rel_path, destination_abs_path, browserify)
+      target = get_target_path(ts_rel_path, browserify)
+      rake(target.to_s)
+      destination_dir = destination_abs_path.parent
+      if !destination_dir.exist?
+        Dir.mkdir(destination_dir)
+      end
+      FileUtils.cp(target.to_s, destination_abs_path)
     end
 
     private
