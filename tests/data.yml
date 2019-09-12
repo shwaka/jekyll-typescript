@@ -1,0 +1,5 @@
+success:
+  test:
+failure:
+  test_fail:
+    msg: hoge
