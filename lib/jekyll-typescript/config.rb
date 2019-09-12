@@ -25,7 +25,7 @@ module JekyllTypescript
     end
 
     def default_source_dir
-      @ts_config["default_source_dir"]
+      @ts_config["default_source_dir"] || "_ts"
     end
 
     def hooks
