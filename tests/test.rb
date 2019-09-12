@@ -20,7 +20,7 @@ class TestDir
   end
 
   def assert_success
-    Dir.chdir(@dir)
+    Dir.chdir(@@root_dir / @dir)
     `jekyll build 2>&1`
     if $?.exitstatus != 0
       @@error_list << @dir
@@ -37,7 +37,7 @@ class TestDir
     Dir.chdir(@@root_dir)
     dir_list = Dir.glob("*")
                  .select{|f| File.directory? f }
-                 .map{|f| @@root_dir / f }
+                 .map{|f| Pathname.new(f) }
 
     dir_list.each do |dir|
       test_dir = TestDir.new(dir)
