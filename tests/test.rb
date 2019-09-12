@@ -3,9 +3,9 @@ require 'pathname'
 require 'yaml'
 
 def test
-  TestDir.set_data("data.yml")
   current_dir = Pathname.pwd
-  TestDir.test_all_subdir(current_dir)
+  TestDir.init("data.yml", current_dir)
+  TestDir.test_all_subdir()
   TestDir.show
 end
 
@@ -13,8 +13,8 @@ class TestDir
   @@error_list = []
 
   def initialize(dir)
-    if dir.relative?
-      raise "dir must be a full path"
+    if !dir.relative?
+      raise "dir must be a relative path"
     end
     @dir = dir
   end
@@ -27,16 +27,17 @@ class TestDir
     end
   end
 
-  def self.set_data(filename)
-    yaml_str = Pathname(filename).read
+  def self.init(data_filename, root_dir)
+    @@root_dir = root_dir
+    yaml_str = Pathname(data_filename).read
     @@data = YAML.load(yaml_str)
   end
 
-  def self.test_all_subdir(root_dir)
-    Dir.chdir(root_dir)
+  def self.test_all_subdir()
+    Dir.chdir(@@root_dir)
     dir_list = Dir.glob("*")
                  .select{|f| File.directory? f }
-                 .map{|f| root_dir / f }
+                 .map{|f| @@root_dir / f }
 
     dir_list.each do |dir|
       test_dir = TestDir.new(dir)
