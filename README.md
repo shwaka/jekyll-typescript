@@ -67,7 +67,7 @@ typescript:  # optional
 ```
 
 ## `.ts` file with front matter
-```json
+```
 ---
 ---
 {
