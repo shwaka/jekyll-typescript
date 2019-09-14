@@ -1,0 +1,11 @@
+plugins:
+  - jekyll-typescript
+typescript:
+  build_dir: .tsbuild
+  default_source_dir: _ts
+  in_source_build:
+    - source_dir: _ts
+      source_file: test.ts
+      destination: js/test.js
+      browserify: false
+livereload: true
