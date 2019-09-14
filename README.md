@@ -90,3 +90,7 @@ typescript:  # optional
         - エラーを吐いて build 自体止まってしまう？
     - 参考: [Dependency versions | GitHub Pages](https://pages.github.com/versions/)
       ここに載っている plugins だけが使える？
+    - in-source build が `jekyll serve` での2回目以降の build で走らない．
+      hook を `:site, :after_reset` にすれば2回目以降も走るけど，
+      そのままだと無限ループになってしまう．
+      rake を使えば多分2回にはできる．1回にするにはどうしたら良いんだろう…？
