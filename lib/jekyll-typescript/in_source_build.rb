@@ -2,7 +2,7 @@
 require "jekyll-typescript/config"
 require "jekyll-typescript/handler"
 
-Jekyll::Hooks.register :site, :after_init do |site|
+Jekyll::Hooks.register :site, :after_reset do |site|
   config = JekyllTypescript::Config.new(site.config)
   config.in_source_build.each do |build_info|
     source_dir = build_info["source_dir"] || config.default_source_dir
