@@ -2,6 +2,7 @@
 require "pathname"
 require "rake"
 require "fileutils"
+require "jekyll-typescript/config"
 
 module JekyllTypescript
   class FiltersClass
@@ -9,10 +10,11 @@ module JekyllTypescript
   end
 
   class Handler
-    def initialize(ts_dir, build_dir)
+    def initialize(config, ts_dir_rel)
       # ts_dir, build_dir: Pathname or string
-      @ts_dir = Pathname.new(ts_dir)
-      @build_dir = Pathname.new(build_dir)
+      @config = config
+      @ts_dir = Pathname.new(@config.get_ts_dir(ts_dir_rel))
+      @build_dir = Pathname.new(@config.get_build_dir(ts_dir_rel))
     end
 
     def get_target_code(ts_rel_path, browserify)
