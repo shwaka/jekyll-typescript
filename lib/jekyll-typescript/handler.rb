@@ -41,13 +41,7 @@ module JekyllTypescript
     end
 
     def create_in_source(ts_rel_path, destination_abs_path, browserify)
-      target = get_target_path(ts_rel_path, browserify)
-      rake(target.to_s)
-      destination_dir = destination_abs_path.parent
-      if !destination_dir.exist?
-        Dir.mkdir(destination_dir)
-      end
-      FileUtils.cp(target.to_s, destination_abs_path)
+      rake(destination_abs_path)
     end
 
     private
@@ -96,6 +90,20 @@ module JekyllTypescript
           rake_app.define_task Rake::FileTask, {browserified_jsfile => jsfile} do |t|
             puts "Browserifying #{jsfile}..."
             `browserify #{jsfile} -o #{browserified_jsfile}`
+          end
+        end
+
+        @config.in_source_build.each do |build_info|
+          destination_abs_path = @config.site_source / build_info["destination"]
+          ts_rel_path = build_info["source_file"]
+          browserify = build_info["browserify"]
+          target = get_target_path(ts_rel_path, browserify)
+          rake_app.define_task Rake::FileTask, {destination_abs_path => target.to_s} do |t|
+            destination_dir = destination_abs_path.parent
+            if !destination_dir.exist?
+              Dir.mkdir(destination_dir)
+            end
+            FileUtils.cp(target.to_s, destination_abs_path)
           end
         end
       end
