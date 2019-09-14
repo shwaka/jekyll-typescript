@@ -40,7 +40,7 @@ module JekyllTypescript
       system("node #{target.to_s}")
     end
 
-    def create_in_source(ts_rel_path, destination_abs_path, browserify)
+    def create_in_source(destination_abs_path)
       rake(destination_abs_path)
     end
 
