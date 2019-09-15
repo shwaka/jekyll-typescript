@@ -41,7 +41,7 @@ module JekyllTypescript
 
     def generate_page(destination, cache = false)
       cache_file = page_cache_file(destination)
-      if !cache
+      if !cache && cache_file.exist?
         FileUtils.rm(cache_file)
       end
       rake(cache_file.to_s)
