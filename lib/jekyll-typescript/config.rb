@@ -10,11 +10,11 @@ module JekyllTypescript
       @site_source = Pathname(site_config["source"])
       @ts_config = site_config["typescript"]
       @build_dir = @ts_config["build_dir"] || ".tsbuild"
-      @build_dir_base = @site_source / @build_dir
+      # @build_dir_base = @site_source / @build_dir
     end
 
     def add_exclude
-      @site_config["exclude"].push(@build_dir_base.to_s)
+      # @site_config["exclude"].push(@build_dir_base.to_s)
       get_source_dir_list.each do |dir|
         @site_config["exclude"].push((@site_source / dir / @build_dir).to_s)
       end
@@ -34,7 +34,8 @@ module JekyllTypescript
     end
 
     def get_build_dir(ts_dir_relative)
-      return @build_dir_base / ts_dir_relative
+      return @site_source / ts_dir_relative / @build_dir
+      # return @build_dir_base / ts_dir_relative
     end
 
     def get_ts_dir(ts_dir_relative)
