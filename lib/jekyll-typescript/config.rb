@@ -14,7 +14,11 @@ module JekyllTypescript
     end
 
     def add_exclude
-      @site_config["exclude"].push(@build_dir_base.to_s).uniq!
+      @site_config["exclude"].push(@build_dir_base.to_s)
+      get_source_dir_list.each do |dir|
+        @site_config["exclude"].push((@site_source / dir / @build_dir).to_s)
+      end
+      @site_config["exclude"].uniq!
     end
 
     def get_source_dir_list
