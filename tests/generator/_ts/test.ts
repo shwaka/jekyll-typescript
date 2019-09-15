@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import {JSDOM} from 'jsdom';
+import {foo} from './lib';
 
 function get_data(): string {
   const site = JSON.parse(fs.readFileSync("./site.json", "utf8"));
@@ -23,6 +24,8 @@ function main() {
 
   // console.log(`<div style="color: blue;">data: ${data_str}</div>`);
   console.log(document.body.innerHTML);
+
+  foo(document);
 }
 
 main();
