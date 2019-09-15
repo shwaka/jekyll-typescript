@@ -19,11 +19,11 @@ module Jekyll
     end
 
     def generate_content(page_data)
+      destination = page_data["destination"]
       config = JekyllTypescript::Config.new(@site.config)
       ts_dir_rel = page_data["source_dir"]
-      site_json_file = page_data["site_json_file"]
-      handler = JekyllTypescript::Handler.new(config, ts_dir_rel)
-      return handler.run_to_s(page_data["source_file"], site_json_file, site)
+      handler = JekyllTypescript::Handler.new(config, ts_dir_rel, @site)
+      return handler.generate_page(destination)
     end
   end
 

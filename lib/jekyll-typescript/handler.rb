@@ -10,11 +10,12 @@ module JekyllTypescript
   end
 
   class Handler
-    def initialize(config, ts_dir_rel)
+    def initialize(config, ts_dir_rel, site = nil)
       # ts_dir, build_dir: Pathname or string
       @config = config
       @ts_dir = Pathname.new(@config.get_ts_dir(ts_dir_rel))
       @build_dir = Pathname.new(@config.get_build_dir(ts_dir_rel))
+      @site = site
     end
 
     def get_target_code(ts_rel_path, browserify)
@@ -28,17 +29,31 @@ module JekyllTypescript
       rake(destination_abs_path)
     end
 
-    def run(ts_rel_path, site_json_file = nil, site = nil)
+    def run(ts_rel_path, site_json_file = nil)
       target = get_target_path(ts_rel_path, false)
-      prepare_run(target, site_json_file, site)
+      rake(target.to_s)
+      if site_json_file
+        write_site_json(site_json_file)
+      end
+      Dir.chdir(@build_dir)
       system("node #{target.to_s}")
     end
 
-    def run_to_s(ts_rel_path, site_json_file = nil, site = nil)
-      target = get_target_path(ts_rel_path, false)
-      prepare_run(target, site_json_file, site)
-      return `node #{target.to_s}`
+    def generate_page(destination)
+      cache_file = page_cache_file(destination)
+      rake(cache_file.to_s)
+      return cache_file.read
     end
+
+    # def run_to_s(ts_rel_path, site_json_file = nil)
+    #   target = get_target_path(ts_rel_path, false)
+    #   rake(target.to_s)
+    #   if site_json_file
+    #     write_site_json(site_json_file)
+    #   end
+    #   Dir.chdir(@build_dir)
+    #   return `node #{target.to_s}`
+    # end
 
     private
     # returns the path to the target file as an object of Pathname
@@ -64,20 +79,33 @@ module JekyllTypescript
       end
     end
 
-    def prepare_run(target, site_json_file = nil, site = nil)
-      # prepare to run
-      rake(target.to_s)
-      if site_json_file
-        if site.nil?
-          raise "site not specified"
-        end
-        json_path = @build_dir / site_json_file
-        json_content = JekyllTypescript::FiltersClass.jsonify(site)
-        json_path.write(json_content)
+    def write_site_json(site_json_file)
+      if @site.nil?
+        raise "site not specified"
       end
-      Dir.chdir(@build_dir)
-      # system("node #{target.to_s}")
+      json_path = @build_dir / site_json_file
+      json_content = JekyllTypescript::FiltersClass.jsonify(@site)
+      json_path.write(json_content)
     end
+
+    def page_cache_file(destination)
+      @build_dir / "page-cache" / destination
+    end
+
+    # def prepare_run(target, site_json_file = nil, site = nil)
+    #   # prepare to run
+    #   rake(target.to_s)
+    #   if site_json_file
+    #     if site.nil?
+    #       raise "site not specified"
+    #     end
+    #     json_path = @build_dir / site_json_file
+    #     json_content = JekyllTypescript::FiltersClass.jsonify(site)
+    #     json_path.write(json_content)
+    #   end
+    #   Dir.chdir(@build_dir)
+    #   # system("node #{target.to_s}")
+    # end
 
     def setup(rake_app)
       if File.exist?("Rakefile")
@@ -116,6 +144,22 @@ module JekyllTypescript
               Dir.mkdir(destination_dir)
             end
             FileUtils.cp(target.to_s, destination_abs_path)
+          end
+        end
+
+        @config.pages.each do |page_data|
+          destination_abs_path = page_cache_file(page_data["destination"])
+          ts_rel_path = page_data["source_file"]
+          js_file = get_target_path(ts_rel_path, false)
+          rake_app.define_task Rake::FileTask, {destination_abs_path => js_file.to_s} do |t|
+            site_json_file = page_data["site_json_file"]
+            if site_json_file
+              write_site_json(site_json_file)
+            end
+            Dir.chdir(@build_dir)
+            FileUtils.mkdir_p(destination_abs_path.dirname)
+            result = `node #{js_file.to_s}`
+            destination_abs_path.write(result)
           end
         end
       end

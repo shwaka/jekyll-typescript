@@ -11,13 +11,13 @@ module JekyllTypescript
       ts_dir_rel = hook["source_dir"] || config.default_source_dir
       ts_rel_path = hook["source_file"]
       site_json_file = hook["site_json_file"]
-      handler = JekyllTypescript::Handler.new(config, ts_dir_rel)
+      handler = JekyllTypescript::Handler.new(config, ts_dir_rel, site)
       if container_name == :site
         if event_name == :after_init
-          handler.run(ts_rel_path, site_json_file, site)
+          handler.run(ts_rel_path, site_json_file)
         else
           Jekyll::Hooks.register container_name, event_name do |_site|
-            handler.run(ts_rel_path, site_json_file, _site)
+            handler.run(ts_rel_path, site_json_file)
           end
         end
       else
