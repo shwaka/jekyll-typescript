@@ -1,6 +1,7 @@
 noerror:
   test:
   in_source_build:
+  generator:
 error:
   test_fail:
     error_msg_regexp: "jekyll"
