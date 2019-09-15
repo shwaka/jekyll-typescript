@@ -2,7 +2,9 @@ plugins:
   - jekyll-typescript
 typescript:
   build_dir: .tsbuild
-  default_source_dir: _ts
+  source_dir:
+    - _ts
+    - _ts2
   hooks:
     - container: site
       event: post_read

@@ -52,15 +52,17 @@ plugins:
   - jekyll-typescript
 typescript:  # optional
   build_dir: .tsbuild  # optional, default: .tsbuild
-  default_source_dir: _ts  # optional, default: _ts
+  source_dir:  # required
+    - _ts
+    - _ts2
   hooks:  # optional
     - container: site  # required
       event: post_read  # required
-      source_dir: _ts  # optional, default: the value of default_source_dir
+      source_dir: _ts  # optional, default: the first value of source_dir
       source_file: test.ts  # required
       site_json_file: site.json  # optional, default: null
   in_source_build:  # optional
-    - source_dir: _ts  # optional, default: the value of default_source_dir
+    - source_dir: _ts  # optional, default: the first value of source_dir
       source_file: test.ts  # required
       destination: js/generated/test.js  # required
       browserify: true  # optional, default: false
