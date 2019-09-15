@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "types": ["node"],
+    "typeRoots": ["/usr/local/lib/node_modules/@types"]
+  }
+}

@@ -1,0 +1,15 @@
+plugins:
+  - jekyll-typescript
+typescript:
+  build_dir: .tsbuild
+  source_dir:
+    - _ts
+  pages:
+    - source_dir: _ts
+      source_file: test.ts
+      layout: tspage.html
+      destination: hoge/fuga.html
+      site_json_file: site.json
+      data:
+        title: MyPageTitle
+livereload: true
