@@ -23,7 +23,8 @@ module Jekyll
       config = JekyllTypescript::Config.new(@site.config)
       ts_dir_rel = page_data["source_dir"]
       handler = JekyllTypescript::Handler.new(config, ts_dir_rel, @site)
-      return handler.generate_page(destination)
+      cache = page_data["cache"]
+      return handler.generate_page(destination, cache)
     end
   end
 

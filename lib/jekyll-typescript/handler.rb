@@ -39,8 +39,11 @@ module JekyllTypescript
       system("node #{target.to_s}")
     end
 
-    def generate_page(destination)
+    def generate_page(destination, cache = false)
       cache_file = page_cache_file(destination)
+      if !cache
+        FileUtils.rm(cache_file)
+      end
       rake(cache_file.to_s)
       return cache_file.read
     end
@@ -151,7 +154,9 @@ module JekyllTypescript
           destination_abs_path = page_cache_file(page_data["destination"])
           ts_rel_path = page_data["source_file"]
           js_file = get_target_path(ts_rel_path, false)
-          rake_app.define_task Rake::FileTask, {destination_abs_path => js_file.to_s} do |t|
+          depend_files = (page_data["depend"] || []).map{|f| (@config.site_source / f).to_s }
+          rake_app.define_task Rake::FileTask,
+                               {destination_abs_path => [js_file.to_s] + depend_files} do |t|
             site_json_file = page_data["site_json_file"]
             if site_json_file
               write_site_json(site_json_file)
