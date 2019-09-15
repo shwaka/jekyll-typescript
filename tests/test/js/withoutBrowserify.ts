@@ -2,5 +2,5 @@
 ---
 {
   "source": "sourceWithoutBrowserify.ts",
-  "browserify": true
+  "browserify": false
 }
