@@ -16,4 +16,12 @@ typescript:
       source_file: test.ts
       destination: js/generated/test.js
       browserify: true
+  pages:
+    - source_dir: _ts2
+      source_file: test.ts
+      layout: pagefromts.html
+      destination: hoge/hoge.html
+      site_json_file: site.json
+      data:
+        title: foooooo
 livereload: true

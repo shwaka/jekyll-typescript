@@ -24,24 +24,20 @@ module JekyllTypescript
       return target.read
     end
 
+    def create_in_source(destination_abs_path)
+      rake(destination_abs_path)
+    end
+
     def run(ts_rel_path, site_json_file = nil, site = nil)
-      # for hooks
       target = get_target_path(ts_rel_path, false)
-      rake(target.to_s)
-      if site_json_file
-        if site.nil?
-          raise "site not specified"
-        end
-        json_path = @build_dir / site_json_file
-        json_content = JekyllTypescript::FiltersClass.jsonify(site)
-        json_path.write(json_content)
-      end
-      Dir.chdir(@build_dir)
+      prepare_run(target, site_json_file, site)
       system("node #{target.to_s}")
     end
 
-    def create_in_source(destination_abs_path)
-      rake(destination_abs_path)
+    def run_to_s(ts_rel_path, site_json_file = nil, site = nil)
+      target = get_target_path(ts_rel_path, false)
+      prepare_run(target, site_json_file, site)
+      return `node #{target.to_s}`
     end
 
     private
@@ -66,6 +62,21 @@ module JekyllTypescript
         setup(rake_app)
         rake_app[target_name].invoke
       end
+    end
+
+    def prepare_run(target, site_json_file = nil, site = nil)
+      # prepare to run
+      rake(target.to_s)
+      if site_json_file
+        if site.nil?
+          raise "site not specified"
+        end
+        json_path = @build_dir / site_json_file
+        json_content = JekyllTypescript::FiltersClass.jsonify(site)
+        json_path.write(json_content)
+      end
+      Dir.chdir(@build_dir)
+      # system("node #{target.to_s}")
     end
 
     def setup(rake_app)

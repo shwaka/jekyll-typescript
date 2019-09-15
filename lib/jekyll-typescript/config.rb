@@ -51,6 +51,10 @@ module JekyllTypescript
       return @ts_config["hooks"] || []
     end
 
+    def pages
+      return @ts_config["pages"] || []
+    end
+
     def in_source_build
       return @ts_config["in_source_build"] || []
     end
