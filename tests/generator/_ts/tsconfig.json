@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "jsdom"],
     "typeRoots": ["/usr/local/lib/node_modules/@types"]
   }
 }

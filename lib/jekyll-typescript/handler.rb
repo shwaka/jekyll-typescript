@@ -94,7 +94,8 @@ module JekyllTypescript
 
         jsfile_list.each do |jsfile|
           rake_app.define_task Rake::FileTask, {jsfile => tsfile_list} do |t|
-            puts "Creating #{jsfile} from #{tsfile_list}..."
+            # puts "Creating #{jsfile} from #{tsfile_list}..."
+            puts "Creating #{jsfile}"
             `tsc --outDir #{@build_dir}`
           end
           browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")

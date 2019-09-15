@@ -3,3 +3,5 @@ Gemfile.lock
 .jekyll-cache/
 _site/
 .tsbuild/
+node_modules/
+package-lock.json

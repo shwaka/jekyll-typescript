@@ -1,15 +1,28 @@
 import * as fs from 'fs';
+import {JSDOM} from 'jsdom';
 
-// document.addEventListener("DOMContentLoaded", function(event){
-//   const div = document.getElementById("foo");
-//   div!.appendChild(document.createTextNode("This text is added by javascript"));
-// });
-
-function main() {
+function get_data(): string {
   const site = JSON.parse(fs.readFileSync("./site.json", "utf8"));
   const data = site.site.data;
   const data_str = JSON.stringify(data, null, 2);
-  console.log(`<div>data: ${data_str}</div>`);
+  return data_str;
+}
+
+function main() {
+  const dom = new JSDOM();
+  const document = dom.window.document;
+
+  const div = document.createElement("div");
+  div.appendChild(document.createTextNode("This is a div!"));
+  document.body.appendChild(div);
+
+  const data_str = get_data();
+  const pre = document.createElement("pre");
+  pre.appendChild(document.createTextNode(data_str));
+  document.body.appendChild(pre);
+
+  // console.log(`<div style="color: blue;">data: ${data_str}</div>`);
+  console.log(document.body.innerHTML);
 }
 
 main();
