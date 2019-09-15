@@ -8,8 +8,8 @@ import * as fs from 'fs';
 function main() {
   const site = JSON.parse(fs.readFileSync("./site.json", "utf8"));
   const data = site.site.data;
-  const data_str = JSON.stringify(data, null, 2)
-  console.log(`<div>data: ${data_str}</div>`)
+  const data_str = JSON.stringify(data, null, 2);
+  console.log(`<div>data: ${data_str}</div>`);
 }
 
 main();
