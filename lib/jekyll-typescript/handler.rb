@@ -132,7 +132,7 @@ module JekyllTypescript
           browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")
           rake_app.define_task Rake::FileTask, {browserified_jsfile => jsfile} do |t|
             puts "Browserifying #{jsfile}..."
-            `browserify #{jsfile} -o #{browserified_jsfile}`
+            `browserify #{jsfile} --outfile #{browserified_jsfile}`
           end
         end
 
