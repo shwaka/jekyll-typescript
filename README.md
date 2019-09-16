@@ -55,17 +55,28 @@ typescript:  # optional
   source_dir:  # required
     - _ts
     - _ts2
-  hooks:  # optional
-    - container: site  # required
-      event: post_read  # required
-      source_dir: _ts  # optional, default: the first value of source_dir
-      source_file: test.ts  # required
-      site_json_file: site.json  # optional, default: null
+  # hooks:  # optional, obsolete
+  #   - container: site  # required
+  #     event: post_read  # required
+  #     source_dir: _ts  # optional, default: the first value of source_dir
+  #     source_file: test.ts  # required
+  #     site_json_file: site.json  # optional, default: null
   in_source_build:  # optional
     - source_dir: _ts  # optional, default: the first value of source_dir
       source_file: test.ts  # required
       destination: js/generated/test.js  # required
       browserify: true  # optional, default: false
+  pages:  # optional
+    - source_dir: _ts  # optional, default: the first value of source_dir
+      source_file: test.ts  # required
+      layout: tspage.html  # required
+      destination: hoge/fuga.html  # required
+      site_json_file: site.json  # optional, default: null
+      cache: true  # optional, default: false
+      depend:  # required if cache is true
+        - _data/mydata.yml
+      data:  # optional, default: empty
+        title: MyPageTitle
 ```
 
 ## `.ts` file with front matter
