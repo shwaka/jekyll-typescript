@@ -107,3 +107,4 @@ typescript:  # optional
       hook を `:site, :after_reset` にすれば2回目以降も走るけど，
       そのままだと無限ループになってしまう．
       rake を使えば多分2回にはできる．1回にするにはどうしたら良いんだろう…？
+- converter でも `source_dir` を指定できるようにする．
