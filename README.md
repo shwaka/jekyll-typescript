@@ -109,3 +109,7 @@ typescript:  # optional
       rake を使えば多分2回にはできる．1回にするにはどうしたら良いんだろう…？
 - converter でも `source_dir` を指定できるようにする．
 - `tsc` でエラーが発生しても無視されてしまう
+- `Handler#setup`で デフォルトの `Rakefile` を無効にできるようにする．
+  プロジェクトごとに設定できる方が良い？
+- `tests/test.rb` を実行する際に，予め `bundle update` や `jekyll clean` を走らせるようにする．
+- ↑に関連して，このプラグインにも `clean` 機能をつける．

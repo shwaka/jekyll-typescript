@@ -2,6 +2,7 @@ noerror:
   test:
   in_source_build:
   generator:
+  custom_rakefile:
 error:
   test_fail:
     error_msg_regexp: "jekyll"

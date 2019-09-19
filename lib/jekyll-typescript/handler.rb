@@ -114,11 +114,13 @@ module JekyllTypescript
       if File.exist?("Rakefile")
         ENV["TSBUILD"] = @build_dir.to_s
         rake_app.load_rakefile
-      else
-        tsfile_list = Dir["./**/*.ts"]
+      end
+      if true  # TODO: 設定で無効にできるようにする
+        tsfile_relpath_list = Dir.glob("./**/*.ts")
+        tsfile_list = tsfile_relpath_list.map {|f| File.absolute_path(f)}
 
         # generate .js file by tsc
-        jsfile_list = tsfile_list.map do |tsfile|
+        jsfile_list = tsfile_relpath_list.map do |tsfile|
           basename = tsfile.sub(/\.ts$/, ".js").sub(%r(^\./), "")
           "#{@build_dir}/#{basename}"
         end

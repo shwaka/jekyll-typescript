@@ -1,0 +1,6 @@
+plugins:
+  - jekyll-typescript
+typescript:
+  build_dir: .tsbuild
+  source_dir: _ts
+livereload: true

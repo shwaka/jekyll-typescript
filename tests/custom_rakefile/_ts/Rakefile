@@ -1,0 +1,9 @@
+require "pathname"
+
+current_dir = Pathname.new(Dir.pwd)
+
+ts = (current_dir / "test.ts").to_s
+puts ts
+file ts => "Rakefile" do
+  puts "test.ts is used!!!"
+end
