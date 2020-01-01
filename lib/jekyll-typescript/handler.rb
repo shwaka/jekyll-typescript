@@ -14,8 +14,22 @@ module JekyllTypescript
       # ts_dir, build_dir: Pathname or string
       @config = config
       @ts_dir = Pathname.new(@config.get_ts_dir(ts_dir_rel))
+      self.npm_install
       @build_dir = Pathname.new(@config.get_build_dir(ts_dir_rel))
       @site = site
+    end
+
+    def npm_install
+      package_json = @ts_dir / "package.json"
+      node_modules = @ts_dir / "node_modules"
+      if File.exist?(package_json) and (not File.exists?(node_modules))
+        Dir.chdir(@ts_dir)
+        `npm install`
+        status = $?.exitstatus # 終了ステータス
+        if status != 0
+          raise "Failed to install node packages in #{@ts_dir}"
+        end
+      end
     end
 
     def get_target_code(ts_rel_path, browserify)
