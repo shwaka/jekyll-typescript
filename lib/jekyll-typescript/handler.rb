@@ -25,7 +25,7 @@ module JekyllTypescript
       node_modules = @ts_dir / "node_modules"
       if File.exist?(package_json) and (not File.exists?(node_modules))
         Dir.chdir(@ts_dir)
-        `npm install`
+        system("npm install")
         status = $?.exitstatus # 終了ステータス
         if status != 0
           raise "Failed to install node packages in #{@ts_dir}"
@@ -168,12 +168,12 @@ module JekyllTypescript
           rake_app.define_task Rake::FileTask, {jsfile => tsfile_list} do |t|
             # puts "Creating #{jsfile} from #{tsfile_list}..."
             puts "Creating #{jsfile}"
-            `#{self.tsc} --outDir #{@build_dir}`
+            system("#{self.tsc} --outDir #{@build_dir}")
           end
           browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")
           rake_app.define_task Rake::FileTask, {browserified_jsfile => jsfile} do |t|
             puts "Browserifying #{jsfile}..."
-            `#{self.browserify} #{jsfile} --outfile #{browserified_jsfile}`
+            system("#{self.browserify} #{jsfile} --outfile #{browserified_jsfile}")
           end
         end
 
