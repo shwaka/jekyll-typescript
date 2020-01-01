@@ -40,7 +40,7 @@ module JekyllTypescript
       end
       candidates = ["npm run tsc --", "tsc"]
       @tsc = candidates.find do |tsc|
-        system("cd #{@ts_dir} && #{tsc} --version > /dev/null")
+        system("cd #{@ts_dir} && #{tsc} --version > /dev/null 2> /dev/null")
       end
       if @tsc.nil?
         raise "tsc not found"
@@ -54,7 +54,7 @@ module JekyllTypescript
       end
       candidates = ["npm run browserify --", "browserify"]
       @browserify = candidates.find do |browserify|
-        system("cd #{@ts_dir} && #{browserify} --version > /dev/null")
+        system("cd #{@ts_dir} && #{browserify} --version > /dev/null 2> /dev/null")
       end
       if @browserify.nil?
         raise "browserify not found"
