@@ -17,8 +17,7 @@ module JekyllTypescript
       self.npm_install
       @build_dir = Pathname.new(@config.get_build_dir(ts_dir_rel))
       @site = site
-      @tsc = nil
-      @browserify = nil
+      @npm_commands = {}
     end
 
     def npm_install
@@ -34,32 +33,28 @@ module JekyllTypescript
       end
     end
 
+    def get_npm_command(name)
+      if not @npm_commands[name].nil?
+        return @npm_commands[name]
+      end
+      candidates = ["npm run #{name} --", name]
+      @npm_commands[name] = candidates.find do |cmd|
+        system("cd #{@ts_dir} && #{cmd} --version > /dev/null 2> /dev/null")
+      end
+      if @npm_commands[name].nil?
+        raise "command '#{name}' not found"
+      end
+      return @npm_commands[name]
+    end
+
     def tsc
-      if not @tsc.nil?
-        return @tsc
-      end
-      candidates = ["npm run tsc --", "tsc"]
-      @tsc = candidates.find do |tsc|
-        system("cd #{@ts_dir} && #{tsc} --version > /dev/null 2> /dev/null")
-      end
-      if @tsc.nil?
-        raise "tsc not found"
-      end
-      return @tsc
+      # npm run tsc を優先的に使う．ダメなら tsc
+      return self.get_npm_command("tsc")
     end
 
     def browserify
-      if not @browserify.nil?
-        return @browserify
-      end
-      candidates = ["npm run browserify --", "browserify"]
-      @browserify = candidates.find do |browserify|
-        system("cd #{@ts_dir} && #{browserify} --version > /dev/null 2> /dev/null")
-      end
-      if @browserify.nil?
-        raise "browserify not found"
-      end
-      return @browserify
+      # npm run browserify を優先的に使う．ダメなら browserify
+      return self.get_npm_command("browserify")
     end
 
     def get_target_code(ts_rel_path, browserify)
@@ -173,7 +168,6 @@ module JekyllTypescript
           rake_app.define_task Rake::FileTask, {jsfile => tsfile_list} do |t|
             # puts "Creating #{jsfile} from #{tsfile_list}..."
             puts "Creating #{jsfile}"
-            puts self.tsc
             `#{self.tsc} --outDir #{@build_dir}`
           end
           browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")
