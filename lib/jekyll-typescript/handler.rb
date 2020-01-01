@@ -166,6 +166,10 @@ module JekyllTypescript
             Dir.chdir(@build_dir)
             FileUtils.mkdir_p(destination_abs_path.dirname)
             result = `node #{js_file.to_s}`
+            status = $?.exitstatus # 終了ステータス
+            if status != 0
+              raise "Failed to execute #{js_file.to_s}"
+            end
             destination_abs_path.write(result)
           end
         end
