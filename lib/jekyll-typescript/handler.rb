@@ -17,6 +17,8 @@ module JekyllTypescript
       self.npm_install
       @build_dir = Pathname.new(@config.get_build_dir(ts_dir_rel))
       @site = site
+      @tsc = nil
+      @browserify = nil
     end
 
     def npm_install
@@ -30,6 +32,34 @@ module JekyllTypescript
           raise "Failed to install node packages in #{@ts_dir}"
         end
       end
+    end
+
+    def tsc
+      if not @tsc.nil?
+        return @tsc
+      end
+      candidates = ["npm run tsc --", "tsc"]
+      @tsc = candidates.find do |tsc|
+        system("cd #{@ts_dir} && #{tsc} --version > /dev/null")
+      end
+      if @tsc.nil?
+        raise "tsc not found"
+      end
+      return @tsc
+    end
+
+    def browserify
+      if not @browserify.nil?
+        return @browserify
+      end
+      candidates = ["npm run browserify --", "browserify"]
+      @browserify = candidates.find do |browserify|
+        system("cd #{@ts_dir} && #{browserify} --version > /dev/null")
+      end
+      if @browserify.nil?
+        raise "browserify not found"
+      end
+      return @browserify
     end
 
     def get_target_code(ts_rel_path, browserify)
@@ -143,12 +173,13 @@ module JekyllTypescript
           rake_app.define_task Rake::FileTask, {jsfile => tsfile_list} do |t|
             # puts "Creating #{jsfile} from #{tsfile_list}..."
             puts "Creating #{jsfile}"
-            `tsc --outDir #{@build_dir}`
+            puts self.tsc
+            `#{self.tsc} --outDir #{@build_dir}`
           end
           browserified_jsfile = jsfile.sub(/\.js$/, ".browserified.js")
           rake_app.define_task Rake::FileTask, {browserified_jsfile => jsfile} do |t|
             puts "Browserifying #{jsfile}..."
-            `browserify #{jsfile} --outfile #{browserified_jsfile}`
+            `#{self.browserify} #{jsfile} --outfile #{browserified_jsfile}`
           end
         end
 
